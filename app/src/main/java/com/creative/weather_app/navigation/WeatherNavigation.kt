@@ -21,6 +21,5 @@ fun WeatherNavigation() {
 
             MainScreen(navController = navController)
         }
-        // Add other composable destinations here...
     }
 }
