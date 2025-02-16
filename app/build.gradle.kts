@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.creative.weather_app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.creative.weather_app"
