@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.creative.weather_app.ui.MainScreen
-import com.creative.weather_app.ui.SplashScreen
+import com.creative.weather_app.ui.screen.main.MainScreen
+import com.creative.weather_app.ui.screen.splash.SplashScreen
 
 
 @Composable
