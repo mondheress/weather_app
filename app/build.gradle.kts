@@ -80,6 +80,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.7")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation (libs.logging.interceptor.v320)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 
 }
