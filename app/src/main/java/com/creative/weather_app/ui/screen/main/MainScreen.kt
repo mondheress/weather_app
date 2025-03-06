@@ -127,5 +127,6 @@ fun MainContent(data: weatherResponse) {
 @Composable
 fun WeatherStateImage(imageUrl: String) {
 
-    AsyncImage(model = imageUrl, contentDescription = "Icone Image", modifier = Modifier.size(50.dp))
+
+    AsyncImage(model = imageUrl, contentDescription = "Icone Image2", modifier = Modifier.size(50.dp))
 }
