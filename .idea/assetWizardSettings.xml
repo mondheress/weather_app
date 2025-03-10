@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/brightness_2/baseline_brightness_2_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/cloudy_snowing/baseline_cloudy_snowing_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="efe751" />
-                            <entry key="outputName" value="sun_icon" />
+                            <entry key="color" value="143866" />
+                            <entry key="outputName" value="pressure" />
                           </map>
                         </option>
                       </PersistentState>
