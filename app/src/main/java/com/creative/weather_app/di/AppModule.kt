@@ -1,7 +1,7 @@
 package com.creative.weather_app.di
 
 import com.creative.weather_app.network.WeatherAPI
-import com.creative.weather_app.utils.Constants.BASE_URL
+import com.creative.weather_app.utils.Constants.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

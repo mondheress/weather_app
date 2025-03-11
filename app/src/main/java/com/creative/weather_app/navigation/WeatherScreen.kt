@@ -6,5 +6,14 @@ enum class WeatherScreen {
     About,
     FavoriteScreen,
     SearchScreen,
-    SettingScreen
-}
+    SettingScreen;
+
+    companion object {
+        fun fromRoute(route: String?): WeatherScreen = when (route?.substringBefore("/")) {
+            SplashScreen.name -> SplashScreen
+            MainScreen.name -> MainScreen
+            SearchScreen.name -> SearchScreen
+            null -> SplashScreen
+            else -> throw IllegalArgumentException("Route $route is not recognized.")
+        }
+    }}

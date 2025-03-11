@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,7 +23,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,28 +38,38 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.creative.weather_app.data.DataofException
 import com.creative.weather_app.model.weatherResponse
+import com.creative.weather_app.navigation.WeatherScreen
 import com.creative.weather_app.utils.DateUtils.Companion.convertTimeStampToDate
+import com.creative.weather_app.widgets.WeatherAppBar
 import com.creative.weather_app.widgets.WeatherDetailsItem
 import com.creative.weather_app.widgets.WeatherPressureRow
 import com.creative.weather_app.widgets.WeatherSecondRow
 import com.creative.weather_app.widgets.WeatherStateImage
-import com.creative.weather_app.widgets.weatherAppBar
 
 @Composable
-fun MainScreen(navController: NavHostController, mainViewModel: MainScreenViewModel) {
+fun MainScreen(
+    navController: NavHostController,
+    mainViewModel: MainScreenViewModel,
+    country: String?
+) {
 
-
-    Get_Weather(mainViewModel, navController)
+    Log.d("mondher","cityis: "+country.toString().trim())
+    Get_Weather(mainViewModel, navController,country.toString().trim())
 
 }
 
 @Composable
-private fun Get_Weather(mainViewModel: MainScreenViewModel, navController: NavHostController) {
-    val weatherData = produceState<DataofException<weatherResponse, Boolean, Exception>>(
-        initialValue = DataofException(loading = true)
-    ) {
-        value = mainViewModel.getWeatherDatav2("tunis")
+private fun Get_Weather(mainViewModel: MainScreenViewModel, navController: NavHostController,city:String) {
+   val weatherData = produceState<DataofException<weatherResponse, Boolean, Exception>>(
+        initialValue = DataofException(loading = true),
+        key1 = city // Provide the city as a key
+
+   ) {
+        value = mainViewModel.getWeatherDatav2(city.toString())
     }.value
+
+    //20164418
+
     if (weatherData.loading == true) {
         Box(contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
@@ -65,42 +81,49 @@ private fun Get_Weather(mainViewModel: MainScreenViewModel, navController: NavHo
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScaffold(mainViewModel: NavHostController, data: weatherResponse) {
+fun MainScaffold(navController: NavHostController, data: weatherResponse) {
+
     Scaffold(topBar = {
-        weatherAppBar(
+        WeatherAppBar(
             data.city.name + "," + data.city.country,
             elevation = 5.dp,
-            navController = mainViewModel,
-            icon = Icons.Default.ArrowBack
+            navController = navController,
+            icon = Icons.Default.ArrowBack,
+            isMainScreen = true,
+            onAddActionClicked = {
+                Log.d("mondher", "buttonClicked2")
+                navController.navigate(WeatherScreen.SearchScreen.name)
+            }
         )
         {
             Log.d("mondher", "buttonClicked")
         }
-    })
-    {
-        MainContent(data)
+    },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    )
+    { innerPadding->
+        MainContent(data,innerPadding)
 
     }
-
 }
 
 @Composable
-fun MainContent(data: weatherResponse) {
+fun MainContent(data: weatherResponse,innerpadding: PaddingValues) {
     val imageUrl = "https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png"
     Log.d("mondher:", "image: $imageUrl")
 
     Column(
         Modifier
-            .padding(0.dp, 80.dp, 0.dp)
+            .padding(innerpadding)
             .fillMaxWidth(),
 
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally //Center Colum inside screen
     ) {
 
         Text(
             text = convertTimeStampToDate(data.list[0].dt.toLong()),
-            modifier = Modifier.padding(0.dp, 40.dp),
+            modifier = Modifier.padding(0.dp, 20.dp),
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.SemiBold
         )

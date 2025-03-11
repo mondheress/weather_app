@@ -25,7 +25,7 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun weatherAppBar(
+fun WeatherAppBar(
     tile: String,
     icon: ImageVector? = null,
     isMainScreen: Boolean = true,
@@ -40,7 +40,7 @@ fun weatherAppBar(
         modifier = Modifier.shadow(elevation = elevation),
         actions = {
             if (isMainScreen) {
-                IconButton(onClick = {}) {
+                IconButton(onClick = { onAddActionClicked.invoke() }) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "search icon",
