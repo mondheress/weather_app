@@ -45,7 +45,7 @@ fun SearchScreen(nav: NavHostController, mainViewModel: MainScreenViewModel) {
             isMainScreen = false, elevation = 5.dp,
             navController = nav,
         ) {
-            nav.navigate("$route/$") // Correct navigation
+            nav.navigate("$route/") // Correct navigation
         }
     },
         contentWindowInsets = WindowInsets(0, 0, 0, 0))

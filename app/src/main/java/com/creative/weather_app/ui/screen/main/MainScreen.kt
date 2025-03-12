@@ -53,9 +53,17 @@ fun MainScreen(
     country: String?
 ) {
 
-    Log.d("mondher","cityis: "+country.toString().trim())
-    Get_Weather(mainViewModel, navController,country.toString().trim())
+    val DefaultCity = "Tunis"
 
+    Log.d("CurrentDefaultCity", "Cityis1: +"+country.toString())
+
+    if (country.isNullOrEmpty()) {
+        Get_Weather(mainViewModel, navController,DefaultCity)
+    }
+    else{
+        Get_Weather(mainViewModel, navController,country)
+
+    }
 }
 
 @Composable
