@@ -18,24 +18,10 @@ class MainScreenViewModel @Inject constructor(private val repository: WeatherRep
 
     val data : MutableState<DataofException<weatherResponse, Boolean, Exception>>
     = mutableStateOf(DataofException(null,true,Exception("")))
-    init {
-        loadWeather()
+
+    suspend fun getWeatherDatav2(city: String): DataofException<weatherResponse, Boolean, Exception> {
+        return repository.getWeather(cityQuery = city)
     }
 
-    private fun loadWeather() {
-        getWeatherData("tunis")
-    }
-
-    private fun getWeatherData(city: String) {
-
-        viewModelScope.launch {
-            if(city.isEmpty()) return@launch
-            data.value.loading = true
-            data.value = repository.getWeather(cityQuery = city)
-            if(data.value.data.toString().isNotEmpty()) data.value.loading = false
-            Log.d("TAG", "loadWeather: ${data.value.data}")
-
-        }
-    }
 
 }

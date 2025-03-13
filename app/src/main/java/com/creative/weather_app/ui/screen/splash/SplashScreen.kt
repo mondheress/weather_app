@@ -32,6 +32,7 @@ fun SplashScreen(navController: NavHostController) {
     val scale = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
+    val defaultCity = "tunis"
 
     LaunchedEffect(key1 = true, block = {
         scale.animateTo(
@@ -39,7 +40,10 @@ fun SplashScreen(navController: NavHostController) {
                 easing = { OvershootInterpolator(8f).getInterpolation(it) })
         )
         delay(2000L)
-        navController.navigate(WeatherScreen.MainScreen.name)
+    //    navController.navigate(WeatherScreen.MainScreen.name+"/$defaultCity")
+        navController.navigate("${WeatherScreen.MainScreen.name}/$defaultCity") // Correct navigation
+
+
     })
     Box(
         modifier = Modifier.size(230.dp), // Constrain the size here

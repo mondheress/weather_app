@@ -1,7 +1,7 @@
 package com.creative.weather_app.network
 
 import com.creative.weather_app.model.weatherResponse
-import com.creative.weather_app.utils.Constants.API_KEY
+import com.creative.weather_app.utils.Constants.Constants.API_KEY
 import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Singleton
