@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -35,10 +33,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.creative.weather_app.data.DataofException
 import com.creative.weather_app.model.weatherResponse
 import com.creative.weather_app.navigation.WeatherScreen
+import com.creative.weather_app.ui.screen.setting.SettingsViewModel
 import com.creative.weather_app.utils.DateUtils.Companion.convertTimeStampToDate
 import com.creative.weather_app.widgets.WeatherAppBar
 import com.creative.weather_app.widgets.WeatherDetailsItem
@@ -67,15 +67,26 @@ fun MainScreen(
 }
 
 @Composable
-private fun Get_Weather(mainViewModel: MainScreenViewModel, navController: NavHostController,city:String) {
+private fun Get_Weather(mainViewModel: MainScreenViewModel, navController: NavHostController,city:String,
+                        settingsViewModel: SettingsViewModel = hiltViewModel()) {
    val weatherData = produceState<DataofException<weatherResponse, Boolean, Exception>>(
         initialValue = DataofException(loading = true),
         key1 = city // Provide the city as a key
 
    ) {
-        value = mainViewModel.getWeatherDatav2(city.toString())
+        value = mainViewModel.getWeatherDatav2(city)
     }.value
 
+    val unitFromDb = settingsViewModel.settingList.collectAsState().value
+    var unit by remember {
+        mutableStateOf("imperial")
+    }
+    val isImperial by remember {
+        mutableStateOf(false)
+    }
+    if(unitFromDb.isNotEmpty()) unit = unitFromDb[0].unit.split(" ")[0].lowercase()
+
+    Log.d("mondher","CurrentUnit=: "+unit)
     //20164418
 
     if (weatherData.loading == true) {
@@ -96,7 +107,6 @@ fun MainScaffold(navController: NavHostController, data: weatherResponse) {
             data.city.name + "," + data.city.country,
             elevation = 5.dp,
             navController = navController,
-            icon = Icons.Default.ArrowBack,
             isMainScreen = true,
             onAddActionClicked = {
                 Log.d("mondher", "buttonClicked2")
@@ -150,8 +160,10 @@ fun MainContent(data: weatherResponse,innerpadding: PaddingValues) {
             )
             {
                 WeatherStateImage(imageUrl = imageUrl)
-                Text(text = data.list[0].temp.day.toString(), fontWeight = FontWeight.ExtraBold)
-                Text(text = data.list[0].weather[0].main, fontStyle = FontStyle.Italic)
+                Text(text = data.list[0].temp.day.toString(), fontWeight = FontWeight.ExtraBold,
+                    modifier = Modifier.padding(horizontal = 20.dp) )
+                Text(text = data.list[0].weather[0].main, fontStyle = FontStyle.Italic,
+                    modifier = Modifier.padding(horizontal = 20.dp))
 
 
             }
