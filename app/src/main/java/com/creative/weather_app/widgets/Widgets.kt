@@ -3,6 +3,7 @@ package com.creative.weather_app.widgets
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -50,11 +51,11 @@ import com.creative.weather_app.utils.DateUtils.Companion.formatDate
 
                 Text(
                     text = formatDate(da.dt).split(",")[0].substring(0, 3),
-                    modifier = Modifier.padding(start = 4.dp)
+                    modifier = Modifier.padding(start = 4.dp).weight(0.5f)
                 )
                 WeatherStateImage(imageUrl)
                 Surface(
-                    modifier = Modifier.padding(3.dp),
+                    modifier = Modifier.padding(3.dp).weight(1f),
                     shape = CircleShape,
                     color = Color(0xFFD2D7F3)
                 ) {
@@ -83,7 +84,7 @@ import com.creative.weather_app.utils.DateUtils.Companion.formatDate
                     }
 
 
-                })
+                }, modifier = Modifier.weight(1f).padding(start = 50.dp))
 
             }
 

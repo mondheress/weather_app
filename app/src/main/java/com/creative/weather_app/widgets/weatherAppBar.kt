@@ -1,5 +1,7 @@
 package com.creative.weather_app.widgets
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -26,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,11 +39,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.creative.weather_app.model.Favorite
 import com.creative.weather_app.navigation.WeatherScreen
+import com.creative.weather_app.ui.screen.FavoriteScreen.FavoriteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,6 +57,7 @@ fun WeatherAppBar(
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
     navController: NavController,
+    favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onAddActionClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
 ) {
@@ -96,6 +105,35 @@ fun WeatherAppBar(
                         onButtonClicked.invoke()
                     })
             }
+            if (isMainScreen) {
+
+                val isAlreadyFav = favoriteViewModel.favList.collectAsState().value.filter {
+                    it.city == tile.split(",")[0]
+                }
+                if (isAlreadyFav.isEmpty()) {
+                    Icon(imageVector =  Icons.Default.Favorite,
+                        contentDescription = "Favorite Icon",
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .clickable {
+                                favoriteViewModel.insertFavorite(Favorite(
+                                    city = tile.split(",")[0],
+                                    country = tile.split(",")[1]
+                                ))
+                            }, tint = Color.Red.copy(alpha = 0.7f)
+
+
+                    )
+                }
+                else{
+                    Box(modifier = Modifier.padding(0.dp)) { }
+                }
+
+                //navController.context
+                showToast(context = LocalContext.current, showIt)
+
+
+            }
 
 
         },
@@ -104,6 +142,11 @@ fun WeatherAppBar(
 
 
 }
+
+fun showToast(context: Context, showIt: MutableState<Boolean>) {
+    if (showIt.value) {
+        Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show()
+    }}
 
 @Composable
 fun ShowDropDown(showDialog: MutableState<Boolean>, navController: NavController) {
@@ -163,4 +206,5 @@ fun ShowDropDown(showDialog: MutableState<Boolean>, navController: NavController
             }
         }
     }
+
 }
